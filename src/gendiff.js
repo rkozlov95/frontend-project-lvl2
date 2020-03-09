@@ -19,11 +19,12 @@ export default (obj1, obj2) => {
 
   const entriesObj1 = Object.entries(obj1);
 
-  for (const [key, value] of entriesObj1) {
+  entriesObj1.forEach((element) => {
+    const [key, value] = element;
     if (!_.has(result, key)) {
       result[`- ${key}`] = value;
     }
-  }
+  });
 
-  return JSON.stringify(result);
+  return result;
 };

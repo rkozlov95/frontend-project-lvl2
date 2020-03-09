@@ -26,7 +26,12 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm run build --if-present
-    - run: make lint
-    - run: make test
+    - name: Run linter
+      run: make lint
+    - name: Test & publish code coverage
+      uses: paambaati/codeclimate-action@v2.4.0
       env:
-        CI: true
+	CC_TEST_REPORTER_ID: 8578dc0ee6c2c17f95ea1d0b730f43a63a80a83adcdd8a7a24462d255240e26e
+      with:
+        coverageCommand: make test-coverage
+        debug: true

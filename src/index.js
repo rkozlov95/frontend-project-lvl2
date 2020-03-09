@@ -1,6 +1,6 @@
 import commander from 'commander';
 import fs from 'fs';
-import genDiff from './gendiff.js';
+import genDiff from './gendiff';
 
 export default () => {
   const clihelper = commander;
