@@ -2,6 +2,7 @@ import commander from 'commander';
 import fs from 'fs';
 import genDiff from './gendiff';
 
+
 export default () => {
   const clihelper = commander;
   let pathToFile1;
@@ -23,6 +24,7 @@ export default () => {
 
   const rawData1 = fs.readFileSync(pathToFile1);
   const rawData2 = fs.readFileSync(pathToFile2);
+
   const data1 = JSON.parse(rawData1);
   const data2 = JSON.parse(rawData2);
 
