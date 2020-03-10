@@ -1,7 +1,8 @@
 import commander from 'commander';
 import fs from 'fs';
 import genDiff from './gendiff';
-
+import parser from './parser';
+import path from 'path';
 
 export default () => {
   const clihelper = commander;
@@ -22,11 +23,13 @@ export default () => {
 
   if (!clihelper.args.length) clihelper.help();
 
-  const rawData1 = fs.readFileSync(pathToFile1);
-  const rawData2 = fs.readFileSync(pathToFile2);
+  const rawData1 = fs.readFileSync(pathToFile1, 'utf-8');
+  const rawData2 = fs.readFileSync(pathToFile2, 'utf-8');
+  const type1 = path.extname(pathToFile1);
+  const type2 = path.extname(pathToFile2);
 
-  const data1 = JSON.parse(rawData1);
-  const data2 = JSON.parse(rawData2);
+  const data1 = parser(type1.slice(1), rawData1);
+  const data2 = parser(type2.slice(1), rawData2);
 
   const res = genDiff(data1, data2);
   console.log(res);
