@@ -7,3 +7,9 @@
 Utility for finding differences in configuration files.
 
 ## Usage
+
+    $ gendiff path1 path2
+
+### Comparison of flat files (JSON)
+
+[![asciicast](https://asciinema.org/a/310275.svg)](https://asciinema.org/a/310275)
