@@ -1,8 +1,8 @@
+import path from 'path';
 import commander from 'commander';
 import fs from 'fs';
 import genDiff from './gendiff';
 import parser from './parser';
-import path from 'path';
 
 export default () => {
   const clihelper = commander;

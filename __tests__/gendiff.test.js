@@ -1,9 +1,8 @@
+import ini from 'ini';
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
-import ini from 'shmaml';
 import gendiff from '../src/gendiff';
-
 
 const directoryName = path.join(__dirname, '/../__fixtures__/');
 

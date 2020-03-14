@@ -13,3 +13,8 @@ Utility for finding differences in configuration files.
 ### Comparison of flat files (JSON)
 
 [![asciicast](https://asciinema.org/a/310275.svg)](https://asciinema.org/a/310275)
+
+### Comparison of flat files (YML)
+
+
+### Comparison of flat files (JSON)
