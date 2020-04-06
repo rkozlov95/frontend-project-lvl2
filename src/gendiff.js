@@ -1,32 +1,36 @@
-import _ from 'lodash';
+import { has, reduce, forEach, sortBy } from 'lodash';
 
-export default (obj1, obj2) => {
-  const result = _.reduce(obj2, (acc, value, key) => {
-    if (_.has(obj1, key)) {
-      if (obj1[key] !== value) {
-        acc.push(`  + ${key}: ${value}`);
-        acc.push(`  - ${key}: ${obj1[key]}`);
-        return acc;
-      }
+const genDiff = (obj1, obj2) => {
+  const result = reduce(obj2, (acc, value, key) => {
+    if (typeof value === 'object' && typeof obj1[key] === 'object') {
+      const element = { key, children: [genDiff(obj1[key], value)] };
+      return [...acc, element];
+    }
+    let status;
+
+    if (!has(obj1, key)) {
+      status = 'added';
+    } else if (obj1[key] !== obj2[key]) {
+      status = 'changed';
+      const element1 = { key, value, status };
+      const element2 = { key, value, status: 'removed'};
+      return [...acc, element1, element2];
+    } else {
+      status = 'unchanged';
     }
 
-    if (!_.has(obj1, key)) {
-      acc.push(`  + ${key}: ${value}`);
-      return acc;
-    }
-
-    acc.push(`  ${key}: ${value}`);
-    return acc;
+    const element = { key, value, status };
+    return [...acc, element];
   }, []);
 
-  const entriesObj1 = Object.entries(obj1);
-
-  entriesObj1.forEach((element) => {
-    const [key, value] = element;
-    if (!_.has(obj2, key)) {
-      result.push(`  - ${key}: ${value}`);
+  forEach(obj1, (value, key) => {
+    if (!has(obj2, key)) {
+      result.push({ key, value, status: 'removed'});
     }
   });
 
-  return `{\n${result.join('\n')}\n}\n`;
+  return sortBy(result, [(element) => element.key]);
 };
+
+export default genDiff;
+

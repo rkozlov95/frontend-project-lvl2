@@ -3,6 +3,7 @@ import commander from 'commander';
 import fs from 'fs';
 import genDiff from './gendiff';
 import parser from './parser';
+// import render from './render';
 
 export default () => {
   const clihelper = commander;
@@ -32,5 +33,6 @@ export default () => {
   const data2 = parser(type2.slice(1), rawData2);
 
   const res = genDiff(data1, data2);
+
   console.log(res);
 };
