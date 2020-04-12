@@ -1,4 +1,6 @@
-import { has, reduce, forEach, sortBy } from 'lodash';
+import {
+  has, reduce, forEach, sortBy,
+} from 'lodash';
 
 const genDiff = (obj1, obj2) => {
   const result = reduce(obj2, (acc, value, key) => {
@@ -6,6 +8,7 @@ const genDiff = (obj1, obj2) => {
       const element = { key, children: [genDiff(obj1[key], value)] };
       return [...acc, element];
     }
+
     let status;
 
     if (!has(obj1, key)) {
@@ -13,7 +16,7 @@ const genDiff = (obj1, obj2) => {
     } else if (obj1[key] !== obj2[key]) {
       status = 'changed';
       const element1 = { key, value, status };
-      const element2 = { key, value, status: 'removed'};
+      const element2 = { key, value, status: 'removed' };
       return [...acc, element1, element2];
     } else {
       status = 'unchanged';
@@ -25,7 +28,7 @@ const genDiff = (obj1, obj2) => {
 
   forEach(obj1, (value, key) => {
     if (!has(obj2, key)) {
-      result.push({ key, value, status: 'removed'});
+      result.push({ key, value, status: 'removed' });
     }
   });
 
@@ -33,4 +36,3 @@ const genDiff = (obj1, obj2) => {
 };
 
 export default genDiff;
-

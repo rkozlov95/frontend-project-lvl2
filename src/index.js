@@ -32,7 +32,7 @@ export default () => {
   const data1 = parser(type1.slice(1), rawData1);
   const data2 = parser(type2.slice(1), rawData2);
 
-  const res = genDiff(data1, data2);
+  const result = genDiff(data1, data2);
 
-  console.log(res);
+  console.log(result);
 };
