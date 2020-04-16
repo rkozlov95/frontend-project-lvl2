@@ -47,7 +47,6 @@ export default () => {
       return;
     }
     default:
-      console.log(render(diff))
-      return;
+      console.log(render(diff));
   }
 };

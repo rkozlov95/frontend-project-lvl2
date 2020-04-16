@@ -14,7 +14,10 @@ Utility for finding differences in configuration files.
 
 [![asciicast](https://asciinema.org/a/310275.svg)](https://asciinema.org/a/310275)
 
-### Comparison of flat files (YML)
+### Comparison of nested files (YML)
 
+[![asciicast](https://asciinema.org/a/320773.svg)](https://asciinema.org/a/320773)
 
-### Comparison of flat files (JSON)
+### Comparison of nested files, plain output (ini)
+
+[![asciicast](https://asciinema.org/a/320775.svg)](https://asciinema.org/a/320775)
