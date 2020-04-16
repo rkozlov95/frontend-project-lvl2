@@ -6,9 +6,7 @@
       + setting3: {
             key: value
         }
-      - setting3: {
-            key: value
-        }
+      - setting3: true
       + setting4: blah blah
       + setting5: {
             key5: value5
@@ -18,10 +16,12 @@
           + ops: vops
     group1: {
       + baz: bars
-      - baz: bars
+      - baz: bas
         foo: bar
       + nest: str
-      - nest: str
+      - nest: {
+            key: value
+        }
   - group2: {
         abc: 12345
     }

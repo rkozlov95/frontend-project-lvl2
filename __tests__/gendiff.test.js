@@ -3,7 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
 import gendiff from '../src/gendiff';
-import render from '../src/render';
+import render from '../src/formaters/render';
+import getPlain from '../src/formaters/plain';
+// import getJSON from '../src/formaters/JSON';
 
 const directoryName = path.join(__dirname, '/../__fixtures__/');
 
@@ -22,7 +24,6 @@ test('gendiff json', () => {
   const diff = gendiff(data1, data2);
   const diffToString = render(diff);
 
-
   expect(diffToString).toEqual(equalData);
 });
 
@@ -40,6 +41,8 @@ test('gendiff yml', () => {
   const equalData = fs.readFileSync(pathToEqualDataFile, 'utf-8');
   const diff = gendiff(data1, data2);
   const diffToString = render(diff);
+
+  const diffToPlain = getPlain(diff);
 
   expect(diffToString).toEqual(equalData);
 });
