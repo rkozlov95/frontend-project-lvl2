@@ -24,24 +24,27 @@ const render = (tree, indent = 4) => {
     } = item;
 
     if (children) {
-      return `${getIndent(indent)}${item.key}: {\n${children.map((n) => render(n, indent + 4))}`;
+      const firstLineChildren = `${getIndent(indent)}${item.key}: {\n`;
+      const mappedChildren = children.map((n) => render(n, indent + 4));
+      return `${firstLineChildren}${mappedChildren}`;
     }
 
     if (typeof value === 'object') {
       const [childKey, childValue] = Object.entries(value)[0];
-      const first = `${getIndent(indent)}${key}: {\n`;
-      let temp = first.split('');
-      temp[indent - 2] = check(status);
-      temp = temp.join('');
-      const elem = `${temp}${getIndent(indent + 4)}${childKey}: ${childValue}`;
+      const parts = getIndent(indent).split('');
+      parts[indent - 2] = check(status);
+      const firstLine = `${parts.join('')}${key}: {\n`;
+
+      const elem = `${firstLine}${getIndent(indent + 4)}${childKey}: ${childValue}`;
       const closeBrace = `${getIndent(indent)}}`;
       return `${elem}\n${closeBrace}`;
     }
 
-    const line = `${getIndent(indent)}${item.key}: ${item.value}`;
-    const temp = line.split('');
-    temp[indent - 2] = check(status);
-    return temp.join('');
+    const parts = getIndent(indent).split('');
+    parts[indent - 2] = check(status);
+
+    const line = `${parts.join('')}${item.key}: ${item.value}`;
+    return line;
   });
 
   return result.join('\n');
