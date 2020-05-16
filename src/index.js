@@ -27,11 +27,11 @@ export default () => {
 
   const rawData1 = fs.readFileSync(pathToFile1, 'utf-8');
   const rawData2 = fs.readFileSync(pathToFile2, 'utf-8');
-  const type1 = path.extname(pathToFile1);
-  const type2 = path.extname(pathToFile2);
+  const type1 = path.extname(pathToFile1).slice(1);
+  const type2 = path.extname(pathToFile2).slice(1);
 
-  const data1 = parser(type1.slice(1), rawData1);
-  const data2 = parser(type2.slice(1), rawData2);
+  const data1 = parser(type1, rawData1);
+  const data2 = parser(type2, rawData2);
 
   const diff = genDiff(data1, data2);
 
