@@ -9,20 +9,18 @@ const genDiff = (obj1, obj2) => {
       return [...acc, element];
     }
 
-    let status;
-
     if (!has(obj1, key)) {
-      status = 'added';
-    } else if (obj1[key] !== obj2[key]) {
-      status = 'changed';
-      const element1 = { key, value, status };
-      const element2 = { key, value: obj1[key], status: 'removed' };
-      return [...acc, element1, element2];
-    } else {
-      status = 'unchanged';
+      const element = { key, value, status: 'added' };
+      return [...acc, element];
     }
 
-    const element = { key, value, status };
+    if (obj1[key] !== obj2[key]) {
+      const element1 = { key, value, status: 'changed' };
+      const element2 = { key, value: obj1[key], status: 'removed' };
+      return [...acc, element1, element2];
+    }
+
+    const element = { key, value, status: 'unchanged' };
     return [...acc, element];
   }, []);
 
