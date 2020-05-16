@@ -15,35 +15,35 @@ const check = (status) => {
   }
 };
 
-const getIndent = (count) => ' '.repeat(count);
+const getSpaces = (count) => ' '.repeat(count);
 
-const render = (tree, indent = 4) => {
+const render = (tree, spacesCount = 4) => {
   const result = map(tree, (item) => {
     const {
       key, value, status, children,
     } = item;
 
     if (children) {
-      const firstLineChildren = `${getIndent(indent)}${item.key}: {\n`;
-      const mappedChildren = children.map((n) => render(n, indent + 4));
+      const firstLineChildren = `${getSpaces(spacesCount)}${item.key}: {\n`;
+      const mappedChildren = children.map((n) => render(n, spacesCount + 4));
       return `${firstLineChildren}${mappedChildren}`;
     }
 
     if (typeof value === 'object') {
       const [childKey, childValue] = Object.entries(value)[0];
-      const parts = getIndent(indent).split('');
-      parts[indent - 2] = check(status);
-      const firstLine = `${parts.join('')}${key}: {\n`;
+      const spaces = getSpaces(spacesCount).split('');
+      spaces[spacesCount - 2] = check(status);
 
-      const elem = `${firstLine}${getIndent(indent + 4)}${childKey}: ${childValue}`;
-      const closeBrace = `${getIndent(indent)}}`;
-      return `${elem}\n${closeBrace}`;
+      const firstLine = `${spaces.join('')}${key}: {\n`;
+      const element = `${getSpaces(spacesCount + 4)}${childKey}: ${childValue}\n`;
+      const lastLine = `${getSpaces(spacesCount)}}`;
+      return `${firstLine}${element}${lastLine}`;
     }
 
-    const parts = getIndent(indent).split('');
-    parts[indent - 2] = check(status);
+    const spaces = getSpaces(spacesCount).split('');
+    spaces[spacesCount - 2] = check(status);
 
-    const line = `${parts.join('')}${item.key}: ${item.value}`;
+    const line = `${spaces.join('')}${item.key}: ${item.value}`;
     return line;
   });
 
