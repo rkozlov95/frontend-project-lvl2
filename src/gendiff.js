@@ -33,4 +33,4 @@ const genDiff = (obj1, obj2) => {
   return sortBy(result, [(element) => element.key]);
 };
 
-export default genDiff;
+export default (obj1, obj2) => JSON.stringify(genDiff(obj1, obj2), null, 2);
