@@ -1,10 +1,10 @@
-import fs from 'fs';
-import path from 'path';
-import parser from './parser';
-
 import {
   has, reduce, forEach, sortBy,
 } from 'lodash';
+
+import fs from 'fs';
+import path from 'path';
+import parser from './parser';
 
 const readFile = (pathToFile) => {
   const rawData = fs.readFileSync(pathToFile, 'utf-8');
