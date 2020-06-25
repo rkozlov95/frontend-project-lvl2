@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import gendiff from '../src/gendiff';
-import parser from '../src/parser';
 
 const directoryName = path.join(__dirname, '/../__fixtures__/');
 const pathToEqualDataFile = path.join(directoryName, 'result.txt');
@@ -15,16 +14,7 @@ test.each([
   const pathToBefore = path.join(directoryName, beforeFileName);
   const pathToAfter = path.join(directoryName, afterFileName);
 
-  const rawDataBefore = fs.readFileSync(pathToBefore, 'utf-8');
-  const rawDataAfter = fs.readFileSync(pathToAfter, 'utf-8');
+  const diff = gendiff(pathToBefore, pathToAfter);
 
-  const fileTypeBefore = path.extname(pathToBefore).slice(1);
-  const fileTypeAfter = path.extname(pathToAfter).slice(1);
-
-  const beforeData = parser(fileTypeBefore, rawDataBefore);
-  const afterData = parser(fileTypeAfter, rawDataAfter);
-
-  const diff = gendiff(beforeData, afterData);
-
-  expect(`${diff}\n`).toEqual(equalData);
+  expect(diff).toEqual(equalData.trim());
 });

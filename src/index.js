@@ -1,8 +1,5 @@
-import path from 'path';
 import commander from 'commander';
-import fs from 'fs';
 import genDiff from './gendiff';
-import parser from './parser';
 import render from './formaters/render';
 import getPlain from './formaters/plain';
 
@@ -25,28 +22,20 @@ export default () => {
 
   if (!clihelper.args.length) clihelper.help();
 
-  const rawData1 = fs.readFileSync(pathToFile1, 'utf-8');
-  const rawData2 = fs.readFileSync(pathToFile2, 'utf-8');
-  const type1 = path.extname(pathToFile1).slice(1);
-  const type2 = path.extname(pathToFile2).slice(1);
-
-  const data1 = parser(type1, rawData1);
-  const data2 = parser(type2, rawData2);
-
-  const diff = genDiff(data1, data2);
+  const diff = genDiff(pathToFile1, pathToFile2);
 
   switch (clihelper.format) {
     case 'plain': {
-      const result = getPlain(diff);
+      const result = getPlain(JSON.parse(diff));
       console.log(result);
       return;
     }
     case 'json': {
-      const result = JSON.stringify(diff);
+      const result = JSON.stringify(JSON.parse(diff));
       console.log(result);
       return;
     }
     default:
-      console.log(render(diff));
+      console.log(render(JSON.parse(diff)));
   }
 };
