@@ -2,9 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import gendiff from '../src/gendiff';
 
+let equalData;
 const directoryName = path.join(__dirname, '/../__fixtures__/');
 const pathToEqualDataFile = path.join(directoryName, 'result.txt');
-const equalData = fs.readFileSync(pathToEqualDataFile, 'utf-8');
+
+beforeAll(() => {
+  equalData = fs.readFileSync(pathToEqualDataFile, 'utf-8');
+});
 
 test.each([
   ['before.json', 'after.json'],
