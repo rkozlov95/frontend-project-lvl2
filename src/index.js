@@ -3,7 +3,7 @@ import genDiff from './gendiff';
 import render from './formaters/render';
 import getPlain from './formaters/plain';
 
-export default () => {
+export default (pathToFileBefore, pathToFileAfter) => {
   const clihelper = commander;
   let pathToFile1;
   let pathToFile2;
@@ -20,7 +20,14 @@ export default () => {
 
   clihelper.parse(process.argv);
 
-  if (!clihelper.args.length) clihelper.help();
+  if (!clihelper.args.length && !pathToFileBefore && !pathToFileAfter) {
+    clihelper.help();
+  }
+
+  if (pathToFileBefore && pathToFileAfter) {
+    const diff = genDiff(pathToFileBefore, pathToFileAfter);
+    return diff;
+  }
 
   const diff = genDiff(pathToFile1, pathToFile2);
 
@@ -28,14 +35,17 @@ export default () => {
     case 'plain': {
       const result = getPlain(JSON.parse(diff));
       console.log(result);
-      return;
+      break;
     }
     case 'json': {
       const result = JSON.stringify(JSON.parse(diff));
       console.log(result);
-      return;
+      break;
     }
     default:
       console.log(render(JSON.parse(diff)));
+      break;
   }
+
+  return false;
 };

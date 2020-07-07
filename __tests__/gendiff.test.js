@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import gendiff from '../src/gendiff';
+import gendiff from '../src/index';
 
 let equalData;
 const directoryName = path.join(__dirname, '/../__fixtures__/');
-const pathToEqualDataFile = path.join(directoryName, 'result.txt');
+const pathToEqualDataFile = path.join(directoryName, 'default.txt');
 
 beforeAll(() => {
   equalData = fs.readFileSync(pathToEqualDataFile, 'utf-8');

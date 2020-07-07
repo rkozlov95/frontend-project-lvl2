@@ -51,4 +51,4 @@ const genDiff = (pathToFile1, pathToFile2) => {
   return iter(objData1, objData2);
 };
 
-export default (obj1, obj2) => JSON.stringify(genDiff(obj1, obj2), null, 2);
+export default (obj1, obj2) => JSON.stringify(genDiff(obj1, obj2));
