@@ -18,15 +18,15 @@ export default (pathToFileBefore, pathToFileAfter) => {
       pathToFile2 = secondConfig;
     });
 
+  if (pathToFileBefore && pathToFileAfter) {
+    const diff = genDiff(pathToFileBefore, pathToFileAfter);
+    return diff;
+  }
+
   clihelper.parse(process.argv);
 
   if (!clihelper.args.length && !pathToFileBefore && !pathToFileAfter) {
     clihelper.help();
-  }
-
-  if (pathToFileBefore && pathToFileAfter) {
-    const diff = genDiff(pathToFileBefore, pathToFileAfter);
-    return diff;
   }
 
   const diff = genDiff(pathToFile1, pathToFile2);
