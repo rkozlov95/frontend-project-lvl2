@@ -40,4 +40,4 @@ const getPlain = (tree, path = []) => {
   return result.filter((n) => n !== '').join('\n');
 };
 
-export default (tree, path = []) => `${getPlain(tree, path)}\n`;
+export default getPlain;

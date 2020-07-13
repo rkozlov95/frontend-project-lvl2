@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import gendiff from '../src/index';
+import { genDiff } from '../src/index';
 
 let equalData;
 const directoryName = path.join(__dirname, '/../__fixtures__/');
@@ -18,7 +18,7 @@ test.each([
   const pathToBefore = path.join(directoryName, beforeFileName);
   const pathToAfter = path.join(directoryName, afterFileName);
 
-  const diff = gendiff(pathToBefore, pathToAfter);
+  const diff = genDiff(pathToBefore, pathToAfter);
 
   expect(diff).toEqual(equalData.trim());
 });
