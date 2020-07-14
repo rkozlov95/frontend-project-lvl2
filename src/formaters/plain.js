@@ -14,7 +14,7 @@ const check = (status, path, value, key, tree) => {
     case 'unchanged':
       return '';
     default:
-      return false;
+      return null;
   }
 };
 
