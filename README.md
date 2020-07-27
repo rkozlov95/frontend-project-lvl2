@@ -19,19 +19,19 @@ Utility for finding differences in configuration files. Supported types: YML, JS
 
     $ gendiff pathToFile1 pathToFile2
 
-### Comparison of configuration files, stylish output
+### Stylish output
 
     $ gendiff pathToFile1 pathToFile2
 
 [![asciicast](https://asciinema.org/a/350046.svg)](https://asciinema.org/a/350046)
 
-### Comparison of configuration files, JSON output
+### JSON output
 
     $ gendiff --format json pathToFile1 pathToFile2
 
 [![asciicast](https://asciinema.org/a/350048.svg)](https://asciinema.org/a/350048)
 
-### Comparison of configuration files, plain output
+### Plain output
 
     $ gendiff --format plain pathToFile1 pathToFile2
 
