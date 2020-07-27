@@ -1,43 +1,29 @@
-import { map, find, sortedUniqBy } from 'lodash';
+import { isObject, flatMap } from 'lodash';
 
-const check = (status, path, value, key, tree) => {
-  switch (status) {
-    case 'changed': {
-      const before = find(tree, { key, status: 'removed' });
-      const beforeValue = (typeof before.value === 'object') ? '[complex value]' : before.value;
-      return `Property ${path} was changed from: ${beforeValue} to ${value}`;
-    }
-    case 'removed':
-      return `Property ${path} was deleted`;
-    case 'added':
-      return `Property ${path} was added with value: ${value}`;
-    case 'unchanged':
-      return '';
-    default:
-      return null;
-  }
+const mapping = {
+  updated: (path, value, beforeValue) => `Property ${path} was updated. From ${beforeValue} to ${value}`,
+  removed: (path) => `Property ${path} was removed`,
+  added: (path, value) => `Property ${path} was added with value: ${value}`,
+  unchanged: () => '',
 };
 
-const getPlain = (tree, path = []) => {
-  const filterTree = sortedUniqBy(tree, (n) => n.key);
-  const result = map(filterTree, (item) => {
+const convert = (value) => (isObject(value) ? '[complex value]' : value);
+
+const getPlain = (ast) => {
+  const iter = (tree, path) => flatMap(tree, (item) => {
     const {
-      key, value, children, status,
+      key, children, type, beforeValue, value,
     } = item;
-
     const fullPath = [...path, key];
-
-    if (children) {
-      return children.map((n) => getPlain(n, fullPath));
-    }
-
-    if (typeof value === 'object') {
-      return check(status, fullPath.join('.'), '[complex value]', key, tree);
-    }
-
-    return check(status, fullPath.join('.'), value, key, tree);
-  });
-  return result.filter((n) => n !== '').join('\n');
+    return (children)
+      ? iter(children, fullPath)
+      : mapping[type](
+        fullPath.join('.'),
+        convert(value),
+        convert(beforeValue),
+      );
+  }).filter((x) => x).join('\n');
+  return iter(ast, []);
 };
 
 export default getPlain;

@@ -1,54 +1,72 @@
 import {
-  has, reduce, forEach, sortBy,
+  has, reduce, isObject, keys, union,
 } from 'lodash';
 
 import fs from 'fs';
 import path from 'path';
 import parser from './parser';
+import getStylish from './formaters/stylish';
+import getPlain from './formaters/plain';
 
 const readFile = (pathToFile) => {
   const rawData = fs.readFileSync(pathToFile, 'utf-8');
   const type = path.extname(pathToFile).slice(1);
-  const data = parser(type, rawData);
-  return data;
+  return parser(type, rawData);
 };
 
-const genDiff = (pathToFile1, pathToFile2) => {
-  const objData1 = readFile(pathToFile1);
-  const objData2 = readFile(pathToFile2);
+const actions = [
+  {
+    type: 'nested',
+    check: (key, obj1, obj2) => isObject(obj1[key]) && isObject(obj2[key]),
+    process: (key, type, value, beforeValue, f) => ({ key, type, children: f(beforeValue, value) }),
+  },
+  {
+    type: 'added',
+    check: (key, obj1) => !has(obj1, key),
+    process: (key, type, value) => ({ key, type, value }),
+  },
+  {
+    type: 'removed',
+    check: (key, obj1, obj2) => !has(obj2, key),
+    process: (key, type, value, beforeValue) => ({ key, type, beforeValue }),
+  },
+  {
+    type: 'updated',
+    check: (key, obj1, obj2) => obj1[key] !== obj2[key],
+    process: (key, type, value, beforeValue) => ({
+      key, type, value, beforeValue,
+    }),
+  },
+  {
+    type: 'unchanged',
+    check: (key, obj1, obj2) => obj1[key] === obj2[key],
+    process: (key, type, value) => ({ key, type, value }),
+  },
+];
 
-  const iter = (obj1, obj2) => {
-    const result = reduce(obj2, (acc, value, key) => {
-      if (typeof value === 'object' && typeof obj1[key] === 'object') {
-        const element = { key, children: [iter(obj1[key], value)] };
-        return [...acc, element];
-      }
-
-      if (!has(obj1, key)) {
-        const element = { key, value, status: 'added' };
-        return [...acc, element];
-      }
-
-      if (obj1[key] !== obj2[key]) {
-        const element1 = { key, value, status: 'changed' };
-        const element2 = { key, value: obj1[key], status: 'removed' };
-        return [...acc, element1, element2];
-      }
-
-      const element = { key, value, status: 'unchanged' };
-      return [...acc, element];
-    }, []);
-
-    forEach(obj1, (value, key) => {
-      if (!has(obj2, key)) {
-        result.push({ key, value, status: 'removed' });
-      }
-    });
-
-    return sortBy(result, [(element) => element.key]);
-  };
-
-  return iter(objData1, objData2);
+const getAst = (obj1, obj2) => {
+  const commonKeys = union(keys(obj1), keys(obj2));
+  const result = reduce(commonKeys.sort(), (acc, key) => {
+    const { type, process } = actions.find(({ check }) => check(key, obj1, obj2));
+    return [
+      ...acc,
+      process(key, type, obj2[key], obj1[key], getAst),
+    ];
+  }, []);
+  return result;
 };
 
-export default (obj1, obj2) => JSON.stringify(genDiff(obj1, obj2));
+const formaters = {
+  plain: getPlain,
+  json: JSON.stringify,
+  default: getStylish,
+};
+
+const genDiff = (pathToFile1, pathToFile2, mode) => {
+  const obj1 = readFile(pathToFile1);
+  const obj2 = readFile(pathToFile2);
+  const ast = getAst(obj1, obj2);
+  return formaters[mode || 'default'](ast);
+};
+
+export default genDiff;
