@@ -2,7 +2,7 @@ install:
 	npm install
 	npm publish --dry-run
 	npm link
-start:
+build:
 	npm run build
 lint:
 	npx eslint .

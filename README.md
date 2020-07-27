@@ -4,20 +4,35 @@
 [![Actions Status](https://github.com/rkozlov95/frontend-project-lvl2/workflows/Node.js%20CI/badge.svg)](https://github.com/rkozlov95/frontend-project-lvl2/actions?query=workflow%3A"Node.js+CI")
 
 ## Description
-Utility for finding differences in configuration files.
+Utility for finding differences in configuration files. Supported types: YML, JSON, INI.
+
+## Install & Build
+
+    $ make install
+    $ make build
+
+## Run tests
+
+    $ make test
 
 ## Usage
 
-    $ gendiff path1 path2
+    $ gendiff pathToFile1 pathToFile2
 
-### Comparison of flat files (JSON)
+### Comparison of configuration files, stylish output
 
-[![asciicast](https://asciinema.org/a/310275.svg)](https://asciinema.org/a/310275)
+    $ gendiff pathToFile1 pathToFile2
 
-### Comparison of nested files (YML)
+[![asciicast](https://asciinema.org/a/350046.svg)](https://asciinema.org/a/350046)
 
-[![asciicast](https://asciinema.org/a/320773.svg)](https://asciinema.org/a/320773)
+### Comparison of configuration files, JSON output
 
-### Comparison of nested files, plain output (ini)
+    $ gendiff --format json pathToFile1 pathToFile2
 
-[![asciicast](https://asciinema.org/a/320775.svg)](https://asciinema.org/a/320775)
+[![asciicast](https://asciinema.org/a/350048.svg)](https://asciinema.org/a/350048)
+
+### Comparison of configuration files, plain output
+
+    $ gendiff --format plain pathToFile1 pathToFile2
+
+[![asciicast](https://asciinema.org/a/350047.svg)](https://asciinema.org/a/350047)
