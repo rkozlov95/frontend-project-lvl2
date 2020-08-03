@@ -1,16 +1,16 @@
-import { reduce, isObject, toNumber } from 'lodash';
+import { mapValues, isObject, toNumber } from 'lodash';
 import yaml from 'js-yaml';
 import ini from 'ini';
 
 const repair = (obj) => (
-  reduce(obj, (acc, value, key) => {
-    const item = (/^\d+$/.test(value))
-      ? ({ [key]: toNumber(value) })
-      : ({ [key]: value });
+  mapValues(obj, (value) => {
+    const newValue = (/^\d+$/.test(value))
+      ? toNumber(value)
+      : value;
     return (isObject(value))
-      ? ({ ...acc, [key]: repair(value) })
-      : ({ ...acc, ...item });
-  }, {})
+      ? repair(value)
+      : newValue;
+  })
 );
 
 const mapping = {

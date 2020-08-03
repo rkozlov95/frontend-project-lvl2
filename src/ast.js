@@ -1,18 +1,6 @@
 import {
-  has, reduce, isObject, keys, union,
+  has, isObject, keys, union, sortBy,
 } from 'lodash';
-
-import fs from 'fs';
-import path from 'path';
-import parser from './parser';
-import getStylish from './formaters/stylish';
-import getPlain from './formaters/plain';
-
-const readFile = (pathToFile) => {
-  const rawData = fs.readFileSync(pathToFile, 'utf-8');
-  const type = path.extname(pathToFile).slice(1);
-  return parser(type, rawData);
-};
 
 const actions = [
   {
@@ -46,27 +34,11 @@ const actions = [
 
 const getAst = (obj1, obj2) => {
   const commonKeys = union(keys(obj1), keys(obj2));
-  const result = reduce(commonKeys.sort(), (acc, key) => {
+  const sortedKeys = sortBy(commonKeys);
+  return sortedKeys.map((key) => {
     const { type, process } = actions.find(({ check }) => check(key, obj1, obj2));
-    return [
-      ...acc,
-      process(key, type, obj2[key], obj1[key], getAst),
-    ];
-  }, []);
-  return result;
+    return process(key, type, obj2[key], obj1[key], getAst);
+  });
 };
 
-const formaters = {
-  plain: getPlain,
-  json: JSON.stringify,
-  default: getStylish,
-};
-
-const genDiff = (pathToFile1, pathToFile2, mode) => {
-  const obj1 = readFile(pathToFile1);
-  const obj2 = readFile(pathToFile2);
-  const ast = getAst(obj1, obj2);
-  return formaters[mode || 'default'](ast);
-};
-
-export default genDiff;
+export default getAst;
