@@ -1,5 +1,5 @@
-import getStylish from './stylish';
-import getPlain from './plain';
+import getStylish from './stylish.js';
+import getPlain from './plain.js';
 
 const formaters = {
   plain: getPlain,
@@ -7,6 +7,9 @@ const formaters = {
   stylish: getStylish,
 };
 
-const getPretty = (ast, mode) => formaters[mode](ast);
-
-export default getPretty;
+export default (tree, mode) => {
+  if (!formaters[mode]) {
+    throw new Error('formater does not exist');
+  }
+  return formaters[mode](tree);
+};

@@ -1,21 +1,22 @@
+import { fileURLToPath } from 'url';
 import fs from 'fs';
 import path from 'path';
-import genDiff from '../src/index';
+import genDiff from '../src/index.js';
 
 const encoding = 'utf-8';
 
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
+
 const getPathToFile = (fileName) => path.join(__dirname, '/../__fixtures__/', fileName);
 
-const readFile = (pathToFile) => fs.readFileSync(pathToFile, encoding).trim();
-
-const pathToEqualDataJson = getPathToFile('json-result.txt');
-const pathToEqualDataPlain = getPathToFile('plain-result.txt');
-const pathToEqualFormatedData = getPathToFile('stylish-result.txt');
+const readFile = (fileName) => fs.readFileSync(getPathToFile(fileName), encoding).trim();
 
 describe('test gendiff', () => {
-  const equalDataJson = readFile(pathToEqualDataJson);
-  const equalDataPlain = readFile(pathToEqualDataPlain);
-  const equalFormatedData = readFile(pathToEqualFormatedData);
+  const equalDataJson = readFile('json-result.txt');
+  const equalDataPlain = readFile('plain-result.txt');
+  const equalFormatedData = readFile('stylish-result.txt');
 
   test.each([
     ['before.json', 'after.json'],

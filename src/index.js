@@ -1,20 +1,20 @@
 import fs from 'fs';
 import path from 'path';
-import parser from './parser';
-import getAst from './ast';
-import getPretty from './formaters';
+import parse from './parsers.js';
+import buildTree from './buildTree.js';
+import format from './formaters/index.js';
 
 const convertFileToObject = (pathToFile) => {
   const rawData = fs.readFileSync(pathToFile, 'utf-8');
   const type = path.extname(pathToFile).slice(1);
-  return parser(type, rawData);
+  return parse(type, rawData);
 };
 
 const genDiff = (pathToFile1, pathToFile2, mode = 'stylish') => {
   const obj1 = convertFileToObject(pathToFile1);
   const obj2 = convertFileToObject(pathToFile2);
-  const ast = getAst(obj1, obj2);
-  return getPretty(ast, mode);
+  const tree = buildTree(obj1, obj2);
+  return format(tree, mode.toLowerCase());
 };
 
 export default genDiff;

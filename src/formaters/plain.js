@@ -1,4 +1,4 @@
-import { isObject, flatMap } from 'lodash';
+import _ from 'lodash';
 
 const mapping = {
   updated: (path, value, beforeValue) => `Property ${path} was updated. From ${beforeValue} to ${value}`,
@@ -7,10 +7,10 @@ const mapping = {
   unchanged: () => '',
 };
 
-const convert = (value) => (isObject(value) ? '[complex value]' : value);
+const convert = (value) => (_.isObject(value) ? '[complex value]' : value);
 
 const getPlain = (ast) => {
-  const iter = (tree, path) => flatMap(tree, (item) => {
+  const iter = (tree, path) => _.flatMap(tree, (item) => {
     const {
       key, children, type, beforeValue, value,
     } = item;
